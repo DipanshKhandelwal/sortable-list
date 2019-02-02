@@ -31,10 +31,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <div >
+      <div style={styles.container} >
         <h3>Your favourite list !!</h3>
-        <div>
-        <ul>
+        <div style={styles.list} >
+        <ul style={{ columnCount: 2, flex: 1 }} >
           {this.state.data.map((item, idx) => (
             <span key={item} onDragOver={() => this.onDragOver(idx)}>
               <div
@@ -51,6 +51,33 @@ class App extends React.Component {
         </div>
       </div>
     );
+  }
+}
+
+const styles = {
+  container: {
+    backgroundColor: '#d1d1d1',
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    padding: 10
+  },
+  list: {
+    backgroundColor: '#ffffff',
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10
+  },
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
   }
 }
 
