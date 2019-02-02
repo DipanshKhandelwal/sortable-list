@@ -29,6 +29,16 @@ class App extends React.Component {
     this.draggedIdx = null;
   }
 
+  componentDidMount = () => {
+    if (database) {
+      database.ref(`list`)
+        .on("value", snapshot => {
+          this.setState({ list: snapshot.val(), data: snapshot.val() })
+          console.log(snapshot.val())
+        });
+    }
+  }
+
   render() {
     return (
       <div style={styles.container} >
