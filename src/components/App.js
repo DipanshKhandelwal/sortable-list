@@ -29,6 +29,21 @@ class App extends React.Component {
     this.draggedIdx = null;
   }
 
+  addItem = (item) => {
+    console.log(item)
+    let newList = this.state.data
+    newList.push(item)
+    this.updateDatabase(newList)
+    this.setState({ data: newList })
+  }
+
+  removeItem= (item) => {
+    console.log(item)
+    let list = this.state.data.filter((data) => item != data)
+    this.updateDatabase(list)
+    this.setState({ data: list })
+  }
+
   componentDidMount = () => {
     if (database) {
       database.ref(`list`)
