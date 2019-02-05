@@ -1,18 +1,25 @@
-import React, { Component } from 'react'
-import { ListItem } from './ListItem'
+import React from 'react'
+import ListItem from './ListItem'
+import DisabledItem from './DisabledItem'
+import InputItem from './InputItem'
 import { database } from '../firebase/firebaseApp'
+import './App.css'
 
 class App extends React.Component {
   state = {
-    data: [],
-    query: ''
+    data: ["one"],
+    loading: true,
+  }
+
+  updateDatabase = (list) => {
+    database.ref().set({ list })
   }
 
   onDragStart = (e, index) => {
     this.draggedItem = this.state.data[index];
     e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/html", e.target.parentNode);
-    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
+    e.dataTransfer.setData("text/html", e.target);
+    e.dataTransfer.setDragImage(e.target, 20, 20);
   }
 
   onDragOver = index => {
@@ -23,10 +30,23 @@ class App extends React.Component {
     let data = this.state.data.filter(item => item !== this.draggedItem);
     data.splice(index, 0, this.draggedItem);
     this.setState({ data });
+    console.log(data);
+    this.updateDatabase(data)
   }
 
   onDragEnd = () => {
     this.draggedIdx = null;
+  }
+
+  getList() {
+    const { data } = this.state
+    let list = []
+    for (let i = 0; i < 10; i++) {
+      if (i < data.length) list.push({ id: i, type: 'data', data: data[i] })
+      else if (i == data.length) list.push({ id: i, type: 'add', data: null })
+      else list.push({ id: i, type: 'empty', data: null })
+    }
+    return list;
   }
 
   addItem = (item) => {
@@ -48,61 +68,69 @@ class App extends React.Component {
     if (database) {
       database.ref(`list`)
         .on("value", snapshot => {
-          this.setState({ list: snapshot.val(), data: snapshot.val() })
-          console.log(snapshot.val())
-        });
+          this.setState({ data: snapshot.val(), loading: false })
+          });
     }
   }
 
   render() {
+    if(this.state.loading) return <h1>Loading . . .</h1>
     return (
-      <div style={styles.container} >
-        <h3>Your favourite list !!</h3>
-        <div style={styles.list} >
-        <ul style={{ columnCount: 2, flex: 1 }} >
-          {this.state.data.map((item, idx) => (
-            <span key={item} onDragOver={() => this.onDragOver(idx)}>
-              <div
-                className="drag"
-                draggable
-                onDragStart={e => this.onDragStart(e, idx)}
-                onDragEnd={this.onDragEnd}
-              >
-                <ListItem name={item} />
-              </div>
-            </span>
-          ))}
-        </ul>
+      <div className='container' >
+        <ul><li>Your favourite list !!</li></ul>
+        <div className='list' >
+          <p>Select your skillset </p>
+          <ul 
+          style={{
+            columnCount: 2,
+            width: '90%',
+            position: 'relative',
+            left: -20,
+          }}
+           >
+            {this.getList().map((item, index) => {
+              if (item.type=='empty') {
+                return (
+                  <DisabledItem
+                    key={item.id}
+                    item={item}
+                    index={index}
+                    onDragOver={this.onDragOver}
+                    onDragStart={this.onDragStart}
+                    onDragEnd={this.onDragEnd}
+                  />
+                )
+              } else if (item.type=='add') {
+                return (
+                  <InputItem
+                    key={item.id}
+                    item={item}
+                    index={index}
+                    onDragOver={this.onDragOver}
+                    onDragStart={this.onDragStart}
+                    onDragEnd={this.onDragEnd}
+                    addItem={this.addItem}
+                  />
+                )
+              } else {
+                return (
+                  <ListItem
+                    key={item.id}
+                    item={item}
+                    index={index}
+                    onDragOver={this.onDragOver}
+                    onDragStart={this.onDragStart}
+                    onDragEnd={this.onDragEnd}
+                    removeItem={this.removeItem}
+                  />
+                )
+              }
+
+            })}
+          </ul>
         </div>
       </div>
     );
-  }
-}
-
-const styles = {
-  container: {
-    backgroundColor: '#d1d1d1',
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'column',
-    padding: 10
-  },
-  list: {
-    backgroundColor: '#ffffff',
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10
-  },
-  column: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20
   }
 }
 
