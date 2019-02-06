@@ -8,20 +8,11 @@ const ListItem = (props) => {
       draggable={true}
       onDragStart={e => props.onDragStart(e, props.index)}
       onDragEnd={props.onDragEnd}
-      style={{
-        cursor: 'ns-resize',
-        backgroundColor: '#eeeeee',
-        userSelect: 'auto',
-        boxSizing: 'border-box',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
-        padding: '10px'
-      }} >
+      className="element element-main"  
+    >
       <div style={{ display: 'flex', flexDirection: 'row' }} >
-        <p>{props.index + 1}.</p>
-        <p>{props.item.data}</p>
+        <p style={{ marginLeft: 5, marginRight: 5 }} >{props.index + 1}.</p>
+        <p style={{ marginLeft: 5, marginRight: 5 }} >{props.item.data}</p>
       </div>
       <div style={{ cursor: 'pointer' }} onClick={() => props.removeItem(props.item.data)} >
       <img

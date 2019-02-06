@@ -57,7 +57,7 @@ class App extends React.Component {
     this.setState({ data: newList })
   }
 
-  removeItem= (item) => {
+  removeItem = (item) => {
     console.log(item)
     let list = this.state.data.filter((data) => item != data)
     this.updateDatabase(list)
@@ -69,65 +69,71 @@ class App extends React.Component {
       database.ref(`list`)
         .on("value", snapshot => {
           this.setState({ data: snapshot.val(), loading: false })
-          });
+        });
     }
   }
 
   render() {
-    if(this.state.loading) return <h1>Loading . . .</h1>
     return (
       <div className='container' >
         <ul><li>Your favourite list !!</li></ul>
         <div className='list' >
           <p>Select your skillset </p>
-          <ul 
-          style={{
-            columnCount: 2,
-            width: '90%',
-            position: 'relative',
-            left: -20,
-          }}
-           >
-            {this.getList().map((item, index) => {
-              if (item.type=='empty') {
-                return (
-                  <DisabledItem
-                    key={item.id}
-                    item={item}
-                    index={index}
-                    onDragOver={this.onDragOver}
-                    onDragStart={this.onDragStart}
-                    onDragEnd={this.onDragEnd}
-                  />
-                )
-              } else if (item.type=='add') {
-                return (
-                  <InputItem
-                    key={item.id}
-                    item={item}
-                    index={index}
-                    onDragOver={this.onDragOver}
-                    onDragStart={this.onDragStart}
-                    onDragEnd={this.onDragEnd}
-                    addItem={this.addItem}
-                  />
-                )
-              } else {
-                return (
-                  <ListItem
-                    key={item.id}
-                    item={item}
-                    index={index}
-                    onDragOver={this.onDragOver}
-                    onDragStart={this.onDragStart}
-                    onDragEnd={this.onDragEnd}
-                    removeItem={this.removeItem}
-                  />
-                )
-              }
+          {
+            this.state.loading
+              ? <div className='loader' />
+              :
+              <ul
+                style={{
+                  columnCount: 2,
+                  width: '90%',
+                  position: 'relative',
+                  padding: 0,
+                  margin: 0,
+                  columnGap: 25
+                }}
+              >
+                {this.getList().map((item, index) => {
+                  if (item.type == 'empty') {
+                    return (
+                      <DisabledItem
+                        key={item.id}
+                        item={item}
+                        index={index}
+                        onDragOver={this.onDragOver}
+                        onDragStart={this.onDragStart}
+                        onDragEnd={this.onDragEnd}
+                      />
+                    )
+                  } else if (item.type == 'add') {
+                    return (
+                      <InputItem
+                        key={item.id}
+                        item={item}
+                        index={index}
+                        onDragOver={this.onDragOver}
+                        onDragStart={this.onDragStart}
+                        onDragEnd={this.onDragEnd}
+                        addItem={this.addItem}
+                      />
+                    )
+                  } else {
+                    return (
+                      <ListItem
+                        key={item.id}
+                        item={item}
+                        index={index}
+                        onDragOver={this.onDragOver}
+                        onDragStart={this.onDragStart}
+                        onDragEnd={this.onDragEnd}
+                        removeItem={this.removeItem}
+                      />
+                    )
+                  }
 
-            })}
-          </ul>
+                })}
+              </ul>
+          }
         </div>
       </div>
     );

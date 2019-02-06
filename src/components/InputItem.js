@@ -22,16 +22,16 @@ class InputItem extends React.Component {
   }
 
   handleChange = (newValue) => {
-    this.props.addItem(newValue.value)
+    if (newValue && newValue !== '') this.props.addItem(newValue.value)
   }
 
   handleCreate = (newValue) => {
-    this.props.addItem(newValue)
+    if (newValue && newValue !== '') this.props.addItem(newValue)
   }
 
   render() {
     return (
-      <div style={{ userSelect: 'none', width: '200px' }} >
+      <div className='element element-select' >
         <AsyncCreatableSelect
           isClearable
           value={this.state.value}
@@ -40,6 +40,37 @@ class InputItem extends React.Component {
           loadOptions={this.getOptions}
           onCreateOption={this.handleCreate}
           components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
+
+          menuPortalTarget={document.body}
+          menuContainerStyle={{ 'zIndex': 999 }}
+          styles={
+            {
+              container: base => ({
+                ...base,
+                display: 'blue',
+                flex: 1,
+                flexDirection: 'row',
+                backgroundColor: '#b9cbecb7',
+              }),
+              option: (provided) => ({
+                ...provided,
+                padding: 20,
+              }),
+              control: (base) => ({
+                ...base,
+                display: 'flex',
+                flex: 1,
+                backgroundColor: '#b9cbecb7',
+                padding: 10,
+                paddingLeft: 0
+              }),
+              menuPortal: base => {
+                const { zIndex, ...rest } = base
+                return { ...rest, zIndex: 999, }
+              },
+            }
+          }
+
         />
       </div>
     )
