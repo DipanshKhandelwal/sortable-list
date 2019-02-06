@@ -9,11 +9,4 @@ const DisabledItem = (props) => {
   )
 }
 
-const styles = {
-  item: {
-    display: 'flex',
-    flex: 1
-  }
-}
-
 export default DisabledItem

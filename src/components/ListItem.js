@@ -16,6 +16,7 @@ const ListItem = (props) => {
       </div>
       <div style={{ cursor: 'pointer' }} onClick={() => props.removeItem(props.item.data)} >
       <img
+        alt="delete"
         style={{
           boxSizing: 'border-box',
           height: 20,

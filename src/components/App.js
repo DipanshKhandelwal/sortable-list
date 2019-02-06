@@ -43,7 +43,7 @@ class App extends React.Component {
     let list = []
     for (let i = 0; i < 10; i++) {
       if (i < data.length) list.push({ id: i, type: 'data', data: data[i] })
-      else if (i == data.length) list.push({ id: i, type: 'add', data: null })
+      else if (i === data.length) list.push({ id: i, type: 'add', data: null })
       else list.push({ id: i, type: 'empty', data: null })
     }
     return list;
@@ -59,7 +59,7 @@ class App extends React.Component {
 
   removeItem = (item) => {
     console.log(item)
-    let list = this.state.data.filter((data) => item != data)
+    let list = this.state.data.filter((data) => item !== data)
     this.updateDatabase(list)
     this.setState({ data: list })
   }
@@ -94,7 +94,7 @@ class App extends React.Component {
                 }}
               >
                 {this.getList().map((item, index) => {
-                  if (item.type == 'empty') {
+                  if (item.type === 'empty') {
                     return (
                       <DisabledItem
                         key={item.id}
@@ -105,7 +105,7 @@ class App extends React.Component {
                         onDragEnd={this.onDragEnd}
                       />
                     )
-                  } else if (item.type == 'add') {
+                  } else if (item.type === 'add') {
                     return (
                       <InputItem
                         key={item.id}
