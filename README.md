@@ -5,6 +5,10 @@
 
 <h1 align="center">Sortable List</h1>
 
+<p align="center">
+  <img src="https://travis-ci.org/DipanshKhandelwal/sortable-list.svg?branch=master" align="center">
+</p>
+
 <p align="center">Scratch implementation of a sortable list synced with firebase database !!</p>
 
 ## Clone
